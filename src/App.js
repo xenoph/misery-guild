@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect, useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { getToken } from "./api/battlenet";
 
-function App() {
+import Frontpage from "./pages/Frontpage";
+import CharacterPage from "./pages/CharacterPage";
+
+const MiseryContext = React.createContext();
+export const useMisery = () => useContext(MiseryContext);
+
+const App = () => {
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  const fetchToken = async () => {
+    const tok = await getToken();
+    setToken(tok);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MiseryContext.Provider value={{ token }}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Frontpage} />
+
+          <Route
+            exact
+            path="/character/:name"
+            component={(props) => (
+              <CharacterPage name={props.match.params.name} />
+            )}
+          />
+        </Switch>
+      </Router>
+    </MiseryContext.Provider>
   );
-}
+};
 
 export default App;
