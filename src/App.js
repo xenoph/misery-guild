@@ -22,19 +22,21 @@ const App = () => {
 
   return (
     <MiseryContext.Provider value={{ token }}>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Frontpage} />
+      {token && (
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Frontpage} />
 
-          <Route
-            exact
-            path="/character/:name"
-            component={(props) => (
-              <CharacterPage name={props.match.params.name} />
-            )}
-          />
-        </Switch>
-      </Router>
+            <Route
+              exact
+              path="/character/:name"
+              component={(props) => (
+                <CharacterPage name={props.match.params.name} />
+              )}
+            />
+          </Switch>
+        </Router>
+      )}
     </MiseryContext.Provider>
   );
 };
