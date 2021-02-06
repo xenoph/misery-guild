@@ -125,8 +125,6 @@ const Table = styled.div`
   clear: both;
 `;
 
-const Content = styled.div``;
-
 const Wrapper = styled.div``;
 
 const TableList = ({ characters }) => {
@@ -165,6 +163,16 @@ const TableList = ({ characters }) => {
             </RowColumn>
           </Row>
         </HeaderRowGroup>
+        {characters.map(({ name, covenant, ilvl }, i) => (
+          <CharacterRowGroup>
+            <Row role="row">
+              <RowColumn role="cell">Icon</RowColumn>
+              <RowColumn role="cell">{name}</RowColumn>
+              <RowColumn role="cell">{covenant}</RowColumn>
+              <RowColumn role="cell">{ilvl}</RowColumn>
+            </Row>
+          </CharacterRowGroup>
+        ))}
       </Table>
     </Wrapper>
   );
