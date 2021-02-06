@@ -90,14 +90,35 @@ const RowColumn = styled.div`
   }
 `;
 
-const RowGroup = styled.div`
+const HeaderRowGroup = styled.div`
   font-weight: 700;
   width: 100%;
-  background: ${(props) => props.theme.colors.tableHeader} !important;
-  ${(props) =>
-    props.theme.media.smallDesktop(css`
-      display: none;
-    `)}
+  background: cyan !important;
+  @media ${device.smallDesktop} {
+    display: none;
+  }
+`;
+
+const CharacterRowGroup = styled.div`
+  margin-bottom: 15px;
+  @media ${device.smallDesktopUp} {
+    background: ${(props) => props.theme.colors.tableRowOdd};
+    margin-bottom: 0;
+    &:nth-of-type(odd) {
+      background: ${(props) => props.theme.colors.tableRowEven};
+    }
+  }
+  @media ${device.smallDesktop} {
+    &.active > div {
+      border-top: 5px solid ${(props) => props.theme.colors.validGreen};
+    }
+    &.not-active > div {
+      border-top: 5px solid ${(props) => props.theme.colors.tableBorder};
+    }
+  }
+  &:last-of-type > div {
+    border: 1px solid ${(props) => props.theme.colors.tableBorder};
+  }
 `;
 
 const Table = styled.div`
@@ -106,15 +127,13 @@ const Table = styled.div`
 
 const Content = styled.div``;
 
-const Header = styled.div``;
-
 const Wrapper = styled.div``;
 
 const TableList = ({ characters }) => {
   return (
     <Wrapper>
-      <Header>
-        <RowGroup role="rowgroup">
+      <Table role="table">
+        <HeaderRowGroup role="rowgroup">
           <Row role="row">
             <RowColumn
               role="columnheader"
@@ -145,11 +164,8 @@ const TableList = ({ characters }) => {
               iLevel
             </RowColumn>
           </Row>
-        </RowGroup>
-      </Header>
-      <Content>
-        <Table role="table"></Table>
-      </Content>
+        </HeaderRowGroup>
+      </Table>
     </Wrapper>
   );
 };
