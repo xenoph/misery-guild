@@ -1,19 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
+import { device } from "../config/sizes";
+
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border: 1px solid ${(props) => props.theme.colors.tableBorder};
-  ${(props) =>
-    props.theme.media.smallDesktop(css`
-      padding: 10px 0 0px;
-    `)}
-  ${(props) =>
-    props.theme.media.smallDesktopUp(css`
-      border-bottom: 0;
-    `)}
+  border: 1px solid black;
+  @media ${device.smallDesktop} {
+    padding: 10px 0 0px;
+  }
+  @media ${device.smallDesktop} {
+    border-bottom: 0;
+  }
 `;
 
 const RowColumn = styled.div`
@@ -21,33 +21,31 @@ const RowColumn = styled.div`
   font-size: 16px;
   line-height: 24px;
   word-break: break-word;
-  ${(props) =>
-    props.theme.media.smallDesktop(css`
+
+  @media ${device.smallDesktop} {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding: 0px 10px;
+    display: block;
+    &:before {
+      margin-bottom: 3px;
+      content: attr(data-title);
       font-size: 14px;
-      line-height: 20px;
-      margin-bottom: 10px;
-      padding: 0px 10px;
+      font-weight: bold;
+      text-transform: uppercase;
       display: block;
-      &:before {
-        margin-bottom: 3px;
-        content: attr(data-title);
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: uppercase;
-        display: block;
-      }
-    `)}
+    }
+  }
   &.cell__state {
-    ${(props) =>
-      props.theme.media.smallDesktopUp(css`
-        width: 15%;
-        border-right: 1px solid ${(props) => props.theme.colors.tableBorder};
-      `)}
-    ${(props) =>
-      props.theme.media.smallDesktop(css`
-        width: 55%;
-      `)}
-		.icon {
+    @media ${device.smallDesktopUp} {
+      width: 10%;
+      border-right: 1px solid black;
+    }
+    @media ${device.smallDesktop} {
+      width: 55%;
+    }
+    .icon {
       svg {
         width: 15px;
         height: 15px;
@@ -59,29 +57,47 @@ const RowColumn = styled.div`
         font-weight: bold;
         letter-spacing: 1px;
         font-size: 15px;
-        color: ${(props) => props.theme.colors.linkDark};
-      }
-      &.icon--active {
-        svg {
-          fill: ${(props) => props.theme.colors.validGreen};
-        }
-        span {
-          color: ${(props) => props.theme.colors.validGreenDark};
-        }
+        color: purple;
       }
     }
   }
-  &.cell__user {
-    ${(props) =>
-      props.theme.media.smallDesktopUp(css`
-        width: 20%;
-        border-right: 1px solid ${(props) => props.theme.colors.tableBorder};
-      `)}
-    ${(props) =>
-      props.theme.media.smallDesktop(css`
-        width: 55%;
-      `)}
+  &.cell__name {
+    @media ${device.smallDesktopUp} {
+      width: 45%;
+      border-right: 1px solid black;
+    }
+    @media ${device.smallDesktop} {
+      width: 55%;
+    }
   }
+  &.cell__covenant {
+    @media ${device.smallDesktopUp} {
+      width: 30%;
+      border-right: 1px solid black;
+    }
+    @media ${device.smallDesktop} {
+      width: 55%;
+    }
+  }
+  &.cell__ilvl {
+    @media ${device.smallDesktopUp} {
+      width: 15%;
+      border-right: 1px solid black;
+    }
+    @media ${device.smallDesktop} {
+      width: 55%;
+    }
+  }
+`;
+
+const RowGroup = styled.div`
+  font-weight: 700;
+  width: 100%;
+  background: ${(props) => props.theme.colors.tableHeader} !important;
+  ${(props) =>
+    props.theme.media.smallDesktop(css`
+      display: none;
+    `)}
 `;
 
 const Table = styled.div`
@@ -97,7 +113,40 @@ const Wrapper = styled.div``;
 const TableList = ({ characters }) => {
   return (
     <Wrapper>
-      <Header></Header>
+      <Header>
+        <RowGroup role="rowgroup">
+          <Row role="row">
+            <RowColumn
+              role="columnheader"
+              className="cell cell__class"
+              aria-sort="none"
+            >
+              Class
+            </RowColumn>
+            <RowColumn
+              role="columnheader"
+              className="cell cell__name"
+              aria-sort="none"
+            >
+              Name
+            </RowColumn>
+            <RowColumn
+              role="columnheader"
+              className="cell cell__covenant"
+              aria-sort="none"
+            >
+              Covenant
+            </RowColumn>
+            <RowColumn
+              role="columnheader"
+              className="cell cell__ilvl"
+              aria-sort="none"
+            >
+              iLevel
+            </RowColumn>
+          </Row>
+        </RowGroup>
+      </Header>
       <Content>
         <Table role="table"></Table>
       </Content>
