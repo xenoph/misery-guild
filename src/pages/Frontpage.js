@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getGuildRoster } from "../api/battlenet";
+import { getGuildRoster, getAllGuildData } from "../api/battlenet";
 import { useMisery } from "../App";
 
 import { Link } from "react-router-dom";
@@ -54,9 +54,14 @@ const Frontpage = () => {
   const [guildData, setGuildData] = useState();
 
   useEffect(() => {
-    getGuildCharacter();
+    fetchGuildData();
+    //getGuildCharacter();
     //eslint-disable-next-line
   }, []);
+
+  const fetchGuildData = async () => {
+    const data = await getAllGuildData(token, "misery");
+  };
 
   const getGuildCharacter = async () => {
     const data = await getGuildRoster(token);

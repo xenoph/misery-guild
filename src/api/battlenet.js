@@ -36,28 +36,53 @@ export const getToken = async () => {
   return data;
 };
 
-export const getGuildRoster = async (token) => {
-  const uri = `https://eu.api.blizzard.com/data/wow/guild/terenas/misery/roster?namespace=profile-eu&locale=en_GB&access_token=${token.access_token}`;
+export const getAllGuildData = async (token, guildName) => {
+  let guild = {};
+  const guildRoster = await getGuildRoster(token, guildName);
+
+  guild.characterList = [];
+  guild.inactiveList = [];
+
+  for (let i = 0; i < guildRoster.length; i++) {
+    if (guildRoster[i].character.level > 10) {
+      try {
+        const character = await getCharacterData(
+          token,
+          guildRoster[i].character.name.toLowerCase()
+        );
+
+        guild.characterList.push(character);
+      } catch (e) {
+        guild.inactiveList.push(guildRoster[i].character);
+      }
+    }
+  }
+
+  console.log(guild);
+};
+
+// TODO: Learn how to deal with errors in a promise all
+// const getAllCharacterData = async (token, memberList, allCharacters) => {
+//   return Promise.all(
+//     memberList.map(async (member) => {
+//       const fetchedCharacter = await getCharacterData(
+//         token,
+//         member.name.toLowerCase()
+//       );
+//       allCharacters.push(fetchedCharacter);
+//     })
+//   );
+// };
+
+export const getGuildRoster = async (token, guildName) => {
+  const uri = `https://eu.api.blizzard.com/data/wow/guild/terenas/${guildName}/roster?namespace=profile-eu&locale=en_GB&access_token=${token.access_token}`;
   const { data } = await axios.get(uri, {
     headers: {
       Authorization: "Bearer " + token.access_token,
     },
   });
 
-  let characterList = [];
-
-  data.members.forEach((member) => {
-    let mem = {};
-    mem.playableClass = playableClasses.find(
-      (pc) => pc.id === member.character.playable_class.id
-    );
-    mem.name = member.character.name;
-    mem.level = member.character.level;
-    mem.id = member.character.id;
-    characterList.push(mem);
-  });
-
-  return characterList;
+  return data.members;
 };
 
 export const getSpecializations = async (token) => {
